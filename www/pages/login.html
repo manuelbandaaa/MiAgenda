@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>MiAgenda!</title>
+    <!-- We will include related CSS styles using JavaScript -->
+</head>
+<body>
+
+<div class = "login-screen modal-in">
+   <div class = "view">
+      <div class = "page">
+         <div class = "page-content login-screen-content">
+            <div class = "login-screen-title">
+               <h5>Iniciar Sesión</h5>
+               <img width="120" height="170" src="http://astro.iam.udg.mx/radar/logo_udg.gif">
+            </div>
+            
+            <form action="menu.html" method="POST">
+               <div class = "list-block">
+                  <ul>
+                     <li class = "item-content">
+                        <div class = "item-inner">
+                           <div class = "item-title label">Código</div>
+                           <div class = "item-input">
+                              <input type = "text" name = "codigo" required placeholder = "Ingresa tu código">
+                           </div>
+                        </div>
+                     </li>
+                     
+                     <li class = "item-content">
+                        <div class = "item-inner">
+                           <div class = "item-title label">NIP</div>
+                           <div class = "item-input">
+                              <input type = "password" name = "nip" required placeholder = "Ingresa tu NIP">
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <input type="hidden" name="web" value="https://seguridad1315.000webhostapp.com/PPI/recibe.php">
+               <div class = "list-block">
+                  <ul>
+                     <li><button class = "col button button-fill button-round" type="submit">Iniciar Sesión</button></li>
+                  </ul>
+                  
+                  <div class = "list-block-label">
+                     <p><a href = "#" class = >Acerca de la aplicación</a></p>
+                  </div>
+               </div>
+            </form>
+            
+         </div>
+      </div>
+   </div>
+</div>
+
+<script src="../lib/framework7/js/framework7.min.js"></script>
+    <!--
+    We need the following script to include styles depending on device's OS
+    It is important to keep it as inline script or in separate JS file with this code only!
+    -->
+    <script>
+      (function () {
+        if (Framework7.prototype.device.ios) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
+              );
+          }
+      })();
+    </script>
+    <script type="text/javascript">
+       localStorage.setItem("codigo", 1);
+    </script>
+    <script src="../js/my-app.js"></script>
+</body>
+</html>

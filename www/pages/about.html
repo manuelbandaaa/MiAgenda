@@ -1,0 +1,39 @@
+<!-- Dynamic navbar for iOS theme -->
+{{#if @global.ios}}
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left sliding">
+            <a href="#" class="back">
+                <i class="icon icon-back"></i>
+                <span>Back</span>
+            </a>
+        </div>
+        <div class="center sliding">Acerca</div>
+    </div>
+</div>
+{{/if}}
+ 
+<div class="page" data-page="about">
+    <!-- Fixed navbar for Material theme -->
+    {{else}}
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left">
+                <a href="#" class="back icon-only">
+                    <i class="icon icon-back"></i>
+                </a>
+            </div>
+            <div class="center">Acerca</div>
+        </div>
+    </div>
+    {{/else}}
+    
+    <div class="page-content">
+        <p>Esta aplicación esta desarrollada por:</p>
+        <ul>
+            <li>Juan Manuel Banda Avalos</li>
+            <li>Alexis Eduardo Becerra Márquez</li>
+            <li>Fernando de Jesús Ibarra Díaz</li>
+        </ul>
+    </div>
+</div>    
