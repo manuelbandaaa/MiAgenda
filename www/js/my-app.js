@@ -24,12 +24,28 @@ var myApp = new Framework7({
     // Enable Material theme for Android device only
     material: isIos ? false : true,
     // Enable Template7 pages
-    template7Pages: true
+    template7Pages: true,
+    swipePanel: 'right'
 });
  
 // Init View
 var mainView = myApp.addView('.view-main', {
-    // Don't worry about that Material doesn't support it
-    // F7 will just ignore it for Material theme
     dynamicNavbar: true
+});
+
+var swiper = new Swiper('.swiper-container', {
+  spaceBetween: 30,
+  centeredSlides: true,
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
 });

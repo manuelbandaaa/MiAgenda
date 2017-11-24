@@ -44,7 +44,7 @@
                <input type="hidden" name="web" value="https://seguridad1315.000webhostapp.com/PPI/recibe.php">
                <div class = "list-block">
                   <ul>
-                     <li><button class = "col button button-fill button-round" type="submit">Iniciar Sesión</button></li>
+                     <li><button class = "col button button-fill button-round" type="submit" onclick="iniciarSesion()">Iniciar Sesión</button></li>
                   </ul>
                   
                   <div class = "list-block-label">
@@ -80,7 +80,10 @@
       })();
     </script>
     <script type="text/javascript">
+      function iniciarSesion() {
+        alert("Bienvenido!");
        localStorage.setItem("codigo", 1);
+     }
     </script>
     <script src="../js/my-app.js"></script>
 </body>
