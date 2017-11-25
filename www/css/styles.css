@@ -62,3 +62,11 @@ hr {
 	color: #bbaaaa;
 	margin-left: 2em;
 }
+
+.div-center{
+    background-color: #1E90FF;
+    text-align: center;
+    width: 90%;
+    display: block;
+    margin: auto;
+}

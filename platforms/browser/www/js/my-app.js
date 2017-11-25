@@ -1,43 +1,51 @@
-// Initialize app
-var myApp = new Framework7();
-
-
-// If we need to use custom DOM library, let's save it to $$ variable:
+// Determine theme depending on device
+var isAndroid = Framework7.prototype.device.android === true;
+var isIos = Framework7.prototype.device.ios === true;
+ 
+// Set Template7 global devices flags
+Template7.global = {
+    android: isAndroid,
+    ios: isIos
+};
+ 
+// Define Dom7
 var $$ = Dom7;
-
-// Add view
+ 
+// Change Through navbar layout to Fixed
+if (!isIos) {
+    // Change class
+    $$('.view.navbar-through').removeClass('navbar-through').addClass('navbar-fixed');
+    // And move Navbar into Page
+    $$('.view .navbar').prependTo('.view .page');
+}
+ 
+// Init App
+var myApp = new Framework7({
+    // Enable Material theme for Android device only
+    material: isIos ? false : true,
+    // Enable Template7 pages
+    template7Pages: true,
+    swipePanel: 'right'
+});
+ 
+// Init View
 var mainView = myApp.addView('.view-main', {
-    // Because we want to use dynamic navbar, we need to enable it for this view:
     dynamicNavbar: true
 });
 
-// Handle Cordova Device Ready Event
-$$(document).on('deviceready', function() {
-    console.log("Device is ready!");
+var swiper = new Swiper('.swiper-container', {
+  spaceBetween: 30,
+  centeredSlides: true,
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
 });
-
-
-// Now we need to run the code that will be executed only for About page.
-
-// Option 1. Using page callback for page (for "about" page in this case) (recommended way):
-myApp.onPageInit('about', function (page) {
-    // Do something here for "about" page
-
-})
-
-// Option 2. Using one 'pageInit' event handler for all pages:
-$$(document).on('pageInit', function (e) {
-    // Get page data from event data
-    var page = e.detail.page;
-
-    if (page.name === 'about') {
-        // Following code will be executed for page with data-page attribute equal to "about"
-        myApp.alert('Here comes About page');
-    }
-})
-
-// Option 2. Using live 'pageInit' event handlers for each page
-$$(document).on('pageInit', '.page[data-page="about"]', function (e) {
-    // Following code will be executed for page with data-page attribute equal to "about"
-    myApp.alert('Here comes About page');
-})

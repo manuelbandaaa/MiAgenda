@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>MiAgenda!</title>
+    <!-- We will include related CSS styles using JavaScript -->
+</head>
+<body>
+
+<div class = "login-screen modal-in">
+   <div class = "view">
+      <div class = "page">
+         <div class = "page-content login-screen-content">
+            <div class = "login-screen-title">
+               <h5>Iniciar Sesión</h5>
+               <img width="120" height="170" src="../img/logo_udg.gif">
+            </div>
+            
+            <form>
+               <div class = "list-block">
+                  <ul>
+                     <li class = "item-content">
+                        <div class = "item-inner">
+                           <div class = "item-title label">Código</div>
+                           <div class = "item-input">
+                              <input type = "text" name = "codigo" required placeholder = "Ingresa tu código">
+                           </div>
+                        </div>
+                     </li>
+                     
+                     <li class = "item-content">
+                        <div class = "item-inner">
+                           <div class = "item-title label">NIP</div>
+                           <div class = "item-input">
+                              <input type = "password" name = "nip" required placeholder = "Ingresa tu NIP">
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <div class = "list-block">
+                  <ul>
+                     <li><a href="menu.html" class = "col button button-fill button-round" onclick="iniciarSesion()">Iniciar Sesión</a></li>
+                  </ul>
+                  
+                  <div class = "list-block-label">
+                     <p><a href = "#" class = >Acerca de la aplicación</a></p>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+    <script src="../lib/framework7/js/framework7.min.js"></script>
+    <script>
+      (function () {
+        if (Framework7.prototype.device.ios) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
+              );
+          }
+      })();
+    </script>
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script>
+      function iniciarSesion() {
+        var myApp = new Framework7();
+        var $$ = Dom7;
+        var datosUsuario = document.getElementsByName("codigo")[0].value;
+        var datosPassword = document.getElementsByName("nip")[0].value;
+        $.post("https://dcc.000webhostapp.com/pruebaLogin.php", {codigo: datosUsuario, nip: datosPassword}, function(respuesta){
+          if(respuesta=="0"){
+              myApp.alert('Revisa tus datos e intentalo nuevamente', '¡Datos Invalidos!');
+          }
+          else{
+            valores = respuesta.split(",");
+            localStorage.setItem("codigo", valores[1]);
+            localStorage.setItem("nombre", valores[2]);
+            myApp.alert(valores[2], '¡Bienvenido!', function () {
+              location.href = "menu.html";
+            });
+          }
+        });
+      }
+    </script>
+    <script src="../js/my-app.js"></script>
+</body>
+</html
