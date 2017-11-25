@@ -16,10 +16,10 @@
          <div class = "page-content login-screen-content">
             <div class = "login-screen-title">
                <h5>Iniciar Sesión</h5>
-               <img width="120" height="170" src="http://astro.iam.udg.mx/radar/logo_udg.gif">
+               <img width="120" height="170" src="../img/logo_udg.gif">
             </div>
             
-            <form action="menu.html" method="POST">
+            <form>
                <div class = "list-block">
                   <ul>
                      <li class = "item-content">
@@ -41,10 +41,9 @@
                      </li>
                   </ul>
                </div>
-               <input type="hidden" name="web" value="https://seguridad1315.000webhostapp.com/PPI/recibe.php">
                <div class = "list-block">
                   <ul>
-                     <li><button class = "col button button-fill button-round" type="submit" onclick="iniciarSesion()">Iniciar Sesión</button></li>
+                     <li><a href="menu.html" class = "col button button-fill button-round" onclick="iniciarSesion()">Iniciar Sesión</a></li>
                   </ul>
                   
                   <div class = "list-block-label">
@@ -52,17 +51,12 @@
                   </div>
                </div>
             </form>
-            
          </div>
       </div>
    </div>
 </div>
 
-<script src="../lib/framework7/js/framework7.min.js"></script>
-    <!--
-    We need the following script to include styles depending on device's OS
-    It is important to keep it as inline script or in separate JS file with this code only!
-    -->
+    <script src="../lib/framework7/js/framework7.min.js"></script>
     <script>
       (function () {
         if (Framework7.prototype.device.ios) {
@@ -79,12 +73,26 @@
           }
       })();
     </script>
-    <script type="text/javascript">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script>
       function iniciarSesion() {
-        alert("Bienvenido!");
-       localStorage.setItem("codigo", 1);
-     }
+        var datosUsuario = document.getElementsByName("codigo")[0].value;
+        var datosPassword = document.getElementsByName("nip")[0].value;
+        $.post("https://dcc.000webhostapp.com/pruebaLogin.php", {codigo: datosUsuario, nip: datosPassword}, function(respuesta){
+          if(respuesta=="0"){
+            alert("Datos invalidos");
+          }
+          else{
+            valores = respuesta.split(",");
+            localStorage.setItem("codigo", valores[1]);
+            localStorage.setItem("nombre", valores[2]);
+            location.href = "menu.html";
+            alert("Bienvenido "+valores[2]);
+          }
+          
+        });
+      }
     </script>
     <script src="../js/my-app.js"></script>
 </body>
-</html>
+</html

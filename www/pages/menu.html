@@ -10,23 +10,28 @@
     <title>MiAgenda!</title>
   </head>
   <body>
+
+    <!--Barra de Navegacíon-->
     <div class="statusbar-overlay"></div>
     <div class="panel-overlay"></div>
     <div class="panel panel-right panel-reveal">
         <div class="content-block">
             <img class="img-circle" src="../img/perfil.png">
-            <h4>Usuario de Prueba</h4>
-            <p><a href="#" class="col button button-fill button-round close-panel">Configuración</a></p>
+            <h4 id="user">Usuario de Prueba</h4>
+            <p><a href="#" class="col button button-fill button-round close-panel">Perfil</a></p>
             <p><a href="about.html" class="col button button-fill button-round close-panel">Acerca de</a></p>
             <p><a href="#" class="col button button-fill button-round close-panel cerrar" onclick="cerrarSesion()">Cerrar sesión</a></p>
         </div>
     </div>
 
+    <!--Inicio pagina principal-->
     <div class="views">
       <div class="view view-main navbar-through">
         <div class="navbar">
           <div class="navbar-inner">
-            &nbsp&nbsp<img width="40" height="40" src="../img/icon4.png">
+
+            <!--Titulo-->
+            &nbsp&nbsp<img width="40" height="40" src="../img/icon.png">
             <div class="center">MiAgenda!</div>
             <div class="right">
                 <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
@@ -36,6 +41,9 @@
         <div class="pages">
           <div data-page="index" class="page">
             <div class="page-content">
+
+              <!--Seccion Conoce tu centro Universitario-->
+              <div class="block-title"><h3 class="title">Conoce tu Centro Universitario!</h3><hr></div>
               <div class="swiper-container">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide"><img class="img-slider" src="../img/cucei1.jpg"></div>
@@ -47,12 +55,22 @@
                   <div class="swiper-button-next"></div>
                   <div class="swiper-button-prev"></div>
               </div>
-              <!--<p>Hola</p>-->
+
+              <!--Seccion de Clima-->
+              <div class="block-title"><h3 class="title">Clima</h3><hr></div>
+              
+              <!--Seccion de Noticias-->
+              <div class="block-title"><h3 class="title">Noticias</h3><hr></div>
+
+              <!--Seccion de Horario-->
+              <div class="block-title"><h3 class="title">Horario</h3><hr></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
     <script src="../lib/framework7/js/framework7.min.js"></script>
     <script src="../js/swiper.min.js"></script>
     <script>
@@ -72,6 +90,8 @@
       })();
     </script>
     <script type="text/javascript">
+      var username = localStorage.getItem('nombre') || '<empty>';
+      document.getElementById("user").innerHTML = username;
       function cerrarSesion() {
           localStorage.clear();
           location.href = "login.html";

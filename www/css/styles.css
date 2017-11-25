@@ -49,3 +49,16 @@
     margin: auto;
     width: 40%;
 }
+
+hr { 
+   border: 5px solid #bbbddc; 
+   border-radius: 300px ; 
+   height: 0px; 
+   text-align: center; 
+ }
+
+.title {
+	font-family: "Times New Roman", Times, serif;
+	color: #bbaaaa;
+	margin-left: 2em;
+}
