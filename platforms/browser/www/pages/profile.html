@@ -8,12 +8,12 @@
                 <span>Volver</span>
             </a>
         </div>
-        <div class="center sliding">Horario</div>
+        <div class="center sliding">Acerca de</div>
     </div>
 </div>
 {{/if}}
  
-<div class="page" data-page="schedule">
+<div class="page" data-page="profile">
     <!-- Fixed navbar for Material theme -->
     {{else}}
     <div class="navbar">
@@ -23,12 +23,18 @@
                     <i class="icon icon-back"></i>
                 </a>
             </div>
-            <div class="center">Horario</div>
+            <div class="center">Perfil</div>
         </div>
     </div>
     {{/else}}
     
     <div class="page-content">
-        <p>En desarrollo</p>
+        <div class="div-center">
+            <h2>Información personal</h2>
+            <h4 id="user2"><!--Nombre de usuario--></h4>
+            <div id="photo2"></div>
+            <p>Cambiar foto de perfil</p>
+            <input type='file' id="imageInput" name="imageInput" accept="image/*"/>
+        </div>
     </div>
-</div>    
+</div> 

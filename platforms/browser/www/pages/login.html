@@ -12,7 +12,7 @@
 
 <div class = "login-screen modal-in">
    <div class = "view">
-      <div class = "page">
+      <div class = "page" data-page="login">
          <div class = "page-content login-screen-content">
             <div class = "login-screen-title">
                <h5>Iniciar Sesión</h5>
@@ -89,6 +89,7 @@
             localStorage.setItem("codigo", valores[1]);
             localStorage.setItem("nombre", valores[2]);
             myApp.alert(valores[2], '¡Bienvenido!', function () {
+              $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaUsuario.php", {codigo: valores[1], nombre: valores[2]});
               location.href = "menu.html";
             });
           }

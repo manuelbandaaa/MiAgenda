@@ -33,6 +33,36 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
+//Al cargarse la ventana de Acerca de
+myApp.onPageInit('profile', function (page) {
+  //Se cargan el nombre y la foto
+  var codigo = localStorage.getItem('codigo') || '<empty>';
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
+      valores = respuesta.split("|");
+      document.getElementById("user2").innerHTML = valores[1];
+      newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+      document.getElementById("photo2").innerHTML = newImage;
+  });
+
+  //Cambiar foto de perfil
+  $('#imageInput').change(function(){
+    var filesSelected = document.getElementById("imageInput").files;
+    if (filesSelected.length > 0){
+        var fileToLoad = filesSelected[0];
+        var fileReader = new FileReader();
+        fileReader.onload = function(fileLoadedEvent) {
+            foto = fileLoadedEvent.target.result;
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/updatePhoto.php", {codigo: codigo, foto: foto}, function(respuesta2){
+              myApp.alert(respuesta2, 'Cambio de foto', function () {
+                location.reload();
+              });
+            });
+        };
+        fileReader.readAsDataURL(fileToLoad);
+      }
+  });
+});
+
 var swiper = new Swiper('.swiper-container', {
   spaceBetween: 30,
   centeredSlides: true,
