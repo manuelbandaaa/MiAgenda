@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
     <title>MiAgenda!</title>
   </head>
-  <body>
+  <body onload="onLoad()">
 
     <!--Barra de Navegacíon-->
     <div class="statusbar-overlay"></div>
@@ -74,36 +74,10 @@
               <!--Seccion de Noticias-->
               <div class="block-title"><h3 class="title">Noticias</h3><hr></div>
               <div class="list-block">
-                <ul>
-                  <li>
-                    <a href="about.html" class="item-link item-content">
-                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/3"></div>
-                      <div class="item-inner">
-                        <div class="item-title">Suspensión de Clases</div>
-                        <div class="item-after">Ver</div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="item-link item-content">
-                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/2"></div>
-                      <div class="item-inner">
-                        <div class="item-title">Se aproxima la FIL</div>
-                        <div class="item-after">Ver</div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="item-link item-content">
-                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/1"></div>
-                      <div class="item-inner">
-                        <div class="item-title">Feria del empleo la siguiente semana</div>
-                        <div class="item-after">Ver</div>
-                      </div>
-                    </a>
-                  </li>
-                  </ul>
-                </div>
+                <ul id="news">
+                  <!--Noticias-->    
+                </ul>
+              </div>
 
               <!--Seccion de Horario-->
               <div class="block-title"><h3 class="title">Horario</h3><hr></div>
@@ -135,6 +109,29 @@
     </script>
     <script src="../js/jquery-3.2.1.js"></script>
     <script type="text/javascript">
+
+      //Se cargan la informacion de la base de datos una vez que se termine de cargar la pagina
+      /*function onLoad() {
+        //Se establece nombre de usuario e imagen
+        var codigo = localStorage.getItem('codigo');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
+            valores = respuesta.split("|");
+            document.getElementById("user").innerHTML = valores[1];
+            newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+            document.getElementById("photo").innerHTML = newImage;
+        });
+
+        //Se cargan las noticias
+        $.get("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getNews.php", function(respuesta){
+          data = JSON.parse(respuesta);
+          news="";
+          for (i = 0; i < data.length; i++) { 
+             news+="<li onclick='mostrarNoticia("+data[i][2]+")'><a href='news.html' class='item-link item-content'><div class='item-media'><img width='80' height='80' src='"+data[i][1]+"'></div><div class='item-inner'><div class='item-title'>"+data[i][0]+"</div><div class='item-after'>Ver</div></div></a></li>";
+          }
+          document.getElementById("news").innerHTML = news;
+        });
+      }*/
+
       var myApp = new Framework7(); 
       var $$ = Dom7;
       var ptrContent = $$('.pull-to-refresh-content');
@@ -144,15 +141,6 @@
             myApp.pullToRefreshDone();
             location.reload();
         }, 2000);
-      });
-
-      //Se establece nombre de usuario e imagen
-      var codigo = localStorage.getItem('codigo') || '<empty>';
-      $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
-          valores = respuesta.split("|");
-          document.getElementById("user").innerHTML = valores[1];
-          newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
-          document.getElementById("photo").innerHTML = newImage;
       });
 
       //Calcula clima del dia
@@ -167,11 +155,20 @@
         document.getElementById("temperature").innerHTML = temperature+"°C";
       };
 
+      function mostrarNoticia(id){
+        localStorage.setItem("noticiaId", id);
+      }
+
       function cerrarSesion() {
+        var codigo = localStorage.getItem('codigo');
         myApp.confirm('¿Estás seguro?', 
           function () {
-            localStorage.clear();
-            location.href = "login.html";
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/deleteUser.php", {codigo: codigo}, function(respuesta){
+              myApp.alert(respuesta, "Cerrar Sesión", function(){
+                localStorage.clear();
+                location.href = "login.html";
+              });
+            });
           },
           function () {
           }
@@ -186,5 +183,7 @@
     <!--Libreria para obtener el clima-->
     <script src="https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='Guadalajara, mx')&format=json&callback=callbackFunction"></script>
     <script src="../js/my-app.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtPNc9u3Niia9RQ8Z60ZG1M520OJY7gOg&libraries=places&callback=initMap"
+        async defer></script>
   </body>
 </html> 

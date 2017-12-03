@@ -8,12 +8,12 @@
                 <span>Volver</span>
             </a>
         </div>
-        <div class="center sliding">Acerca de</div>
+        <div class="center sliding">Noticia</div>
     </div>
 </div>
 {{/if}}
  
-<div class="page" data-page="about">
+<div class="page" data-page="news">
     <!-- Fixed navbar for Material theme -->
     {{else}}
     <div class="navbar">
@@ -23,17 +23,18 @@
                     <i class="icon icon-back"></i>
                 </a>
             </div>
-        <div class="center">Acerca de</div>
+            <div class="center">Noticia</div>
+        </div>
     </div>
-</div>
     {{/else}}
     
-<div class="page-content">
-    <p>Esta aplicación esta desarrollada por:</p>
-        <ul>
-            <li>Juan Manuel Banda Avalos</li>
-            <li>Alexis Eduardo Becerra Márquez</li>
-            <li>Fernando de Jesús Ibarra Díaz</li>
-        </ul>
+    <div class="page-content">
+        <div class="div-center2">
+            <h1 id="news-title"><!--Titulo--></h1>
+            <p id="news-date"><!--Fecha--></p>
+            <div id="news-img"><!--Imagen--></div>
+            <p id="news-description"><!--Descripcion--></p>
+            <p id="news-type"><!--Tipo--></p>
+        </div>
     </div>
 </div>    

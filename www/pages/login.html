@@ -47,7 +47,7 @@
                   </ul>
                   
                   <div class = "list-block-label">
-                     <p><a href = "#" class = >Acerca de la aplicación</a></p>
+                     <p><a href = "#" onclick="acercaDe()"">Acerca de la aplicación</a></p>
                   </div>
                </div>
             </form>
@@ -75,9 +75,9 @@
     </script>
     <script src="../js/jquery-3.2.1.js"></script>
     <script>
+      var myApp = new Framework7();
+      var $$ = Dom7;
       function iniciarSesion() {
-        var myApp = new Framework7();
-        var $$ = Dom7;
         var datosUsuario = document.getElementsByName("codigo")[0].value;
         var datosPassword = document.getElementsByName("nip")[0].value;
         $.post("https://dcc.000webhostapp.com/pruebaLogin.php", {codigo: datosUsuario, nip: datosPassword}, function(respuesta){
@@ -88,12 +88,18 @@
             valores = respuesta.split(",");
             localStorage.setItem("codigo", valores[1]);
             localStorage.setItem("nombre", valores[2]);
-            myApp.alert(valores[2], '¡Bienvenido!', function () {
-              $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaUsuario.php", {codigo: valores[1], nombre: valores[2]});
-              location.href = "menu.html";
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaUsuario.php", {codigo: valores[1], nombre: valores[2]}, function(respuesta){
+              myApp.alert(valores[2], respuesta, function () {
+                location.href = "menu.html";
+              });
             });
           }
         });
+      }
+
+      function acercaDe() {
+        var info = "Esta aplicación esta desarrollada por Juan Manuel Banda Avalos, Alexis Eduardo Becerra Márquez y Fernando de Jesús Ibarra Díaz para la materia de Programación para Internet";
+        myApp.alert(info, 'Acerca de la Aplicación');
       }
     </script>
     <script src="../js/my-app.js"></script>

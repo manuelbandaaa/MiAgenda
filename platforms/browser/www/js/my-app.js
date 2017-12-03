@@ -63,6 +63,37 @@ myApp.onPageInit('profile', function (page) {
   });
 });
 
+myApp.onPageInit('news', function (page) {
+  var idNews = localStorage.getItem('noticiaId');
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getInfoNews.php", {id: idNews}, function(respuesta3){
+    dataNews = JSON.parse(respuesta3);
+    document.getElementById("news-title").innerHTML = dataNews[0];
+    document.getElementById("news-date").innerHTML = dataNews[4];
+    document.getElementById("news-img").innerHTML = "<img width='400' height='200s' src='"+dataNews[3]+"'>";
+    document.getElementById("news-description").innerHTML = dataNews[1];
+    document.getElementById("news-type").innerHTML = dataNews[2];
+  });
+});
+
+myApp.onPageInit('schedule', function (page) {
+  var atras = document.getElementsByClassName("refresh")[0];
+  atras.onclick = function(){
+        location.href = "menu.html";
+    }
+});
+
+myApp.onPageInit('map', function (page) {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      mapTypeControl: false,
+      center: {lat: 20.658031, lng: -103.327123},
+      zoom: 19
+    });
+    var marker = new google.maps.Marker({
+      position: {lat: 20.658031, lng: -103.327123},
+      map: map
+    });
+});
+
 var swiper = new Swiper('.swiper-container', {
   spaceBetween: 30,
   centeredSlides: true,
