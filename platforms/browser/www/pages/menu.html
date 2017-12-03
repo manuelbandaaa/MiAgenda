@@ -111,7 +111,7 @@
     <script type="text/javascript">
 
       //Se cargan la informacion de la base de datos una vez que se termine de cargar la pagina
-      /*function onLoad() {
+      function onLoad() {
         //Se establece nombre de usuario e imagen
         var codigo = localStorage.getItem('codigo');
         $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
@@ -130,7 +130,7 @@
           }
           document.getElementById("news").innerHTML = news;
         });
-      }*/
+      }
 
       var myApp = new Framework7(); 
       var $$ = Dom7;
