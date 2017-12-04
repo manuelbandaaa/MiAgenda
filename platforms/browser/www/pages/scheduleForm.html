@@ -13,7 +13,7 @@
 </div>
 {{/if}}
  
-<div class="page" data-page="schedule">
+<div class="page" data-page="schedule-form">
     <!-- Fixed navbar for Material theme -->
     {{else}}
     <div class="navbar">
@@ -29,7 +29,71 @@
     {{/else}}
     
     <div class="page-content">
-        <p>Formulario de Materias</p>
-        <a href="map.html">Mapa</a>
+        <form>
+           <div class = "list-block">
+              <ul>
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">NRC</div>
+                       <div class = "item-input">
+                          <input type = "text" name = "nrc" required placeholder = "NRC de la materia">
+                       </div>
+                    </div>
+                 </li>
+                 
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">Codigo</div>
+                       <div class = "item-input">
+                          <input type = "text" name = "codigo" required placeholder = "Codigo de la materia">
+                       </div>
+                    </div>
+                 </li>
+
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">Nombre</div>
+                       <div class = "item-input">
+                          <input type = "text" name = "nombre" required placeholder = "Nombre de la materia">
+                       </div>
+                    </div>
+                 </li>
+
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">Maestro</div>
+                       <div class = "item-input">
+                           <select id="teachers-list">
+                            <!--Lista de Maestros-->
+                            </select> 
+                       </div>
+                    </div>
+                 </li>
+
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">Modulo</div>
+                       <div class = "item-input">
+                          <input type = "text" name = "modulo" required placeholder = "Modulo de la Clase">
+                       </div>
+                    </div>
+                 </li>
+
+                 <li class = "item-content">
+                    <div class = "item-inner">
+                       <div class = "item-title label">Horario</div>
+                       <div class = "item-input">
+                          <input type = "text" name = "horario" required placeholder = "Horario de la Clase">
+                       </div>
+                    </div>
+                 </li>
+              </ul>
+           </div>
+           <div class = "list-block">
+              <ul>
+                    <li><a href="#" class = "col button button-fill button-round" onclick="registrarMateria()">Registrar Materia</a></li>
+                </ul>
+           </div>
+        </form>
     </div>
 </div>    

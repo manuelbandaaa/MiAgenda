@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
+    <title>Horario</title>
+  </head>
+  <body onload="onLoad()">
+    <!--Inicio pagina principal-->
+    <div class="views">
+      <div class="view view-main navbar-through">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <a href="#" class="icon-only refresh" onclick="regresarMenu()">
+                <i class="icon icon-back"></i>
+            </a>
+            <div class="left">Horario</div>
+          </div>
+        </div>
+        <div class="pages">
+          <div data-page="index" class="page">
+
+            <!-- Speed Dial Wrap -->
+            <div class="speed-dial">
+              <!-- FAB inside will open Speed Dial actions -->
+              <a href="scheduleForm.html" class="floating-button">
+                <!-- First icon is visible when Speed Dial actions are closed -->
+                <i class="icon icon-plus"></i>
+                <i class="icon icon-plus"></i>
+              </a>
+            </div>
+
+            <!--Pull to refresh-->
+            <div class="page-content pull-to-refresh-content">
+              <div class="pull-to-refresh-layer">
+                <div class="preloader"></div>
+                <div class="pull-to-refresh-arrow"></div>
+              </div>
+                <div id="schedule-table">
+                  <div class="table">
+                      <div class="row header blue">
+                        <div class="cell">NRC</div>
+                        <div class="cell">Codigo</div>
+                        <div class="cell">Nombre</div>
+                        <div class="cell">Profesor</div>
+                        <div class="cell">Modulo</div>
+                        <div class="cell">Horario</div>
+                      </div>
+
+                      <div id="schedule-list">
+                          <!--Lista de Materias-->
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="../lib/framework7/js/framework7.min.js"></script>
+    <script src="../js/swiper.min.js"></script>
+    <script>
+      (function () {
+        if (Framework7.prototype.device.ios) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
+              );
+          }
+      })();
+    </script>
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+
+      //Se cargan la informacion de la base de datos una vez que se termine de cargar la pagina
+      function onLoad() {
+        var codigo = localStorage.getItem('codigo');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getStudentSubject.php", {codigo: codigo}, function(respuesta4){
+          data = JSON.parse(respuesta4);
+          //alert(data[0][0]);
+          materias="";
+          for (i = 0; i < data.length; i++) { 
+            materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</a></div><div class='cell' data-title='Horario'>"+data[i][5]+"</div></div>";
+          }
+          document.getElementById("schedule-list").innerHTML = materias;
+        });
+      }
+
+      function regresarMenu(){
+        location.href = "menu.html";
+      }
+
+      var myApp = new Framework7(); 
+      var $$ = Dom7;
+      var ptrContent = $$('.pull-to-refresh-content');
+      ptrContent.on('refresh', function (e) {
+        // Emulate 2s loading
+        setTimeout(function () {
+            myApp.pullToRefreshDone();
+            location.reload();
+        }, 2000);
+      });
+
+      function registrarMateria(){
+        var nrc = document.getElementsByName("nrc")[0].value;
+        var codigoMateria = document.getElementsByName("codigo")[0].value;
+        var nombreMateria = document.getElementsByName("nombre")[0].value;
+        var nombreMaestro = document.getElementsByName("maestro")[0].value;
+        var modulo = document.getElementsByName("modulo")[0].value;
+        var horario = document.getElementsByName("horario")[0].value;
+        var codigoAlumno = localStorage.getItem('codigo');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertSubject.php", {nrc: nrc, codigoMateria: codigoMateria, nombreMateria: nombreMateria, nombreMaestro: nombreMaestro, modulo: modulo, horario: horario, codigoAlumno: codigoAlumno}, function(respuesta5){
+          myApp.alert(respuesta5, "Agregar Materia", function () {
+              location.href = "schedule2.html";
+          });
+        });
+      }
+
+      function verMapa(modulo){
+        moduloSinNumero=modulo.slice(0,modulo.length-2);
+        localStorage.setItem("modulo", moduloSinNumero);
+      }
+    </script>
+
+    <!--<script type="text/javascript" src="data.json">
+      
+    </script>-->
+
+    <!--Libreria para obtener el clima-->
+    <script src="https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='Guadalajara, mx')&format=json&callback=callbackFunction"></script>
+    <script src="../js/my-app.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtPNc9u3Niia9RQ8Z60ZG1M520OJY7gOg&libraries=places&callback=initMap"
+        async defer></script>
+  </body>
+</html> 

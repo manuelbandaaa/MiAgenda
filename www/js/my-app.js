@@ -75,24 +75,72 @@ myApp.onPageInit('news', function (page) {
   });
 });
 
-myApp.onPageInit('schedule', function (page) {
-  var atras = document.getElementsByClassName("refresh")[0];
-  atras.onclick = function(){
-        location.href = "menu.html";
+myApp.onPageInit('schedule-form', function (page) {
+  $.get("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeachers.php", function(respuesta4){
+    data = JSON.parse(respuesta4);
+    teachers="";
+    for (i = 0; i < data.length; i++) { 
+      teachers+="<option name='maestro' value='"+data[i]+"''>"+data[i]+"</option>";
     }
+    document.getElementById("teachers-list").innerHTML = teachers;
+  });
 });
 
+/*myApp.onPageInit('schedule', function (page) {
+  var codigo = localStorage.getItem('codigo');
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getStudentSubject.php", {codigo: codigo}, function(respuesta4){
+    data = JSON.parse(respuesta4);
+    //alert(data[0][0]);
+    materias="";
+    for (i = 0; i < data.length; i++) { 
+      materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'>"+data[i][4]+"</div></div>";
+    }
+    document.getElementById("schedule-list").innerHTML = materias;
+  });
+  var atras = document.getElementsByClassName("refresh")[0];
+  atras.onclick = function(){
+    location.href = "menu.html";
+  }
+});*/
+
 myApp.onPageInit('map', function (page) {
+    var modulo = localStorage.getItem('modulo');
+    var latitud =0;
+    var longitud=0;
+    if(modulo=="X"){
+      latitud=20.658233;
+      longitud=-103.327155;
+    }
+    if(modulo=="W"){
+      latitud=20.658031;
+      longitud=-103.327123;
+    }
+    if(modulo=="U"){
+      latitud=20.658129;
+      longitud=-103.325547;
+    }
+    if(modulo=="T"){
+      latitud=20.657903;
+      longitud=-103.325480;
+    }
+    if(modulo=="Beta" || modulo=="Bet"){
+      latitud=20.656242;
+      longitud=-103.325239;
+    }
     var map = new google.maps.Map(document.getElementById('map'), {
       mapTypeControl: false,
-      center: {lat: 20.658031, lng: -103.327123},
+      center: {lat: latitud, lng: longitud},
       zoom: 19
     });
     var marker = new google.maps.Marker({
-      position: {lat: 20.658031, lng: -103.327123},
+      position: {lat: latitud, lng: longitud},
       map: map
     });
 });
+
+/*myApp.onPageAfterBack('schedule2', function (page) {
+  location.reload();
+});*/
 
 var swiper = new Swiper('.swiper-container', {
   spaceBetween: 30,

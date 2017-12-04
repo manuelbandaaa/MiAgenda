@@ -19,7 +19,7 @@
             <div class="close-panel"><a id="photo" href="profile.html"></a></div>
             <h4 id="user"><!--Nombre de usuario--></h4>
             <p><a href="profile.html" class="col button button-fill button-round close-panel">Perfil</a></p>
-            <p><a href="schedule.html" class="col button button-fill button-round close-panel">Horario</a></p>
+            <p><a href="#" class="col button button-fill button-round" onclick="horario()">Horario</a></p>
             <p><a href="about.html" class="col button button-fill button-round close-panel">Acerca de</a></p>
             <p><a href="#" class="col button button-fill button-round close-panel cerrar" onclick="cerrarSesion()">Cerrar sesión</a></p>
         </div>
@@ -81,7 +81,7 @@
 
               <!--Seccion de Horario-->
               <div class="block-title"><h3 class="title">Horario</h3><hr></div>
-              <a href="schedule.html" class = "col button button-round">Administrar Horario</a>
+              <a href="#" class = "col button button-round" onclick="horario()">Administrar Horario</a>
             </div>
           </div>
         </div>
@@ -173,6 +173,10 @@
           function () {
           }
         );
+      }
+
+      function horario(){
+        location.href = "schedule2.html";
       }
     </script>
 
