@@ -82,17 +82,41 @@
         var datosPassword = document.getElementsByName("nip")[0].value;
         $.post("https://dcc.000webhostapp.com/pruebaLogin.php", {codigo: datosUsuario, nip: datosPassword}, function(respuesta){
           if(respuesta=="0"){
-              myApp.alert('Revisa tus datos e intentalo nuevamente', '¡Datos Invalidos!');
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacher.php", {codigo: datosUsuario}, function(respuesta){
+              if(respuesta=="0"){
+                myApp.alert('Revisa tus datos e intentalo nuevamente', '¡Datos Invalidos!');
+              }
+              else{
+                localStorage.setItem("codigo", datosUsuario);
+                localStorage.setItem("nombre", respuesta);
+                localStorage.setItem("tipo", "T");
+                myApp.alert(respuesta, "¡Bienvenido Maestro!", function () {
+                  location.href = "teacherMenu.html";
+                });
+              }
+            });
           }
           else{
             valores = respuesta.split(",");
             localStorage.setItem("codigo", valores[1]);
             localStorage.setItem("nombre", valores[2]);
-            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaUsuario.php", {codigo: valores[1], nombre: valores[2]}, function(respuesta){
-              myApp.alert(valores[2], respuesta, function () {
-                location.href = "menu.html";
+            if(valores[0]=="T"){
+              $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertTeacher.php", {codigo: valores[1], nombre: valores[2]}, function(respuesta){
+                localStorage.setItem("tipo", "T");
+                myApp.alert(valores[2], respuesta, function () {
+                  location.href = "teacherMenu.html";
+                });
               });
-            });
+            }
+            else{
+              $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaUsuario.php", {codigo: valores[1], nombre: valores[2]}, function(respuesta){
+                localStorage.setItem("tipo", "A");
+                myApp.alert(valores[2], respuesta, function () {
+                  location.href = "menu.html";
+                });
+              });
+            }
+            
           }
         });
       }

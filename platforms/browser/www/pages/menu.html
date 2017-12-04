@@ -115,10 +115,18 @@
         //Se establece nombre de usuario e imagen
         var codigo = localStorage.getItem('codigo');
         $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
-            valores = respuesta.split("|");
-            document.getElementById("user").innerHTML = valores[1];
-            newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
-            document.getElementById("photo").innerHTML = newImage;
+            if(respuesta=="0"){
+              localStorage.clear();
+              myApp.alert("Serás redireccionado al Login", "Sesión Cerrada", function () {
+                  location.href = "login.html";
+                });
+            }
+            else{
+              valores = respuesta.split("|");
+              document.getElementById("user").innerHTML = valores[1];
+              newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+              document.getElementById("photo").innerHTML = newImage;
+            }
         });
 
         //Se cargan las noticias
@@ -161,7 +169,7 @@
 
       function cerrarSesion() {
         var codigo = localStorage.getItem('codigo');
-        myApp.confirm('¿Estás seguro?', 
+        myApp.confirm('¿Estás seguro?', "Cerrando sesión",
           function () {
             $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/deleteUser.php", {codigo: codigo}, function(respuesta){
               myApp.alert(respuesta, "Cerrar Sesión", function(){

@@ -1,0 +1,40 @@
+<!-- Dynamic navbar for iOS theme -->
+{{#if @global.ios}}
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left sliding">
+            <a href="#" class="back">
+                <i class="icon icon-back"></i>
+                <span>Volver</span>
+            </a>
+        </div>
+        <div class="center sliding">Perfil</div>
+    </div>
+</div>
+{{/if}}
+ 
+<div class="page" data-page="teacher-profile">
+    <!-- Fixed navbar for Material theme -->
+    {{else}}
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left">
+                <a href="#" class="back icon-only">
+                    <i class="icon icon-back"></i>
+                </a>
+            </div>
+            <div class="center">Perfil</div>
+        </div>
+    </div>
+    {{/else}}
+    
+    <div class="page-content">
+        <div class="div-center">
+            <h2>Información personal</h2>
+            <h4 id="user2"><!--Nombre de usuario--></h4>
+            <div id="photo2"></div>
+            <p>Cambiar foto de perfil</p>
+            <input type='file' id="imageInput" name="imageInput" accept="image/*"/>
+        </div>
+    </div>
+</div> 

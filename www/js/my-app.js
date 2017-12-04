@@ -33,7 +33,7 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
-//Al cargarse la ventana de Acerca de
+//Al cargarse la ventana de Perfil
 myApp.onPageInit('profile', function (page) {
   //Se cargan el nombre y la foto
   var codigo = localStorage.getItem('codigo') || '<empty>';
@@ -158,3 +158,45 @@ var swiper = new Swiper('.swiper-container', {
     prevEl: '.swiper-button-prev',
   },
 });
+
+//Maestro App
+myApp.onPageInit('teacher-profile', function (page) {
+  //Se cargan el nombre y la foto
+  var codigo = localStorage.getItem('codigo') || '<empty>';
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacherData.php", {codigo: codigo}, function(respuesta){
+      valores = respuesta.split("|");
+      document.getElementById("user2").innerHTML = valores[1];
+      newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+      document.getElementById("photo2").innerHTML = newImage;
+  });
+
+  //Cambiar foto de perfil
+  $('#imageInput').change(function(){
+    var filesSelected = document.getElementById("imageInput").files;
+    if (filesSelected.length > 0){
+        var fileToLoad = filesSelected[0];
+        var fileReader = new FileReader();
+        fileReader.onload = function(fileLoadedEvent) {
+            foto = fileLoadedEvent.target.result;
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/updateTeacherPhoto.php", {codigo: codigo, foto: foto}, function(respuesta2){
+              myApp.alert(respuesta2, 'Cambio de foto', function () {
+                location.reload();
+              });
+            });
+        };
+        fileReader.readAsDataURL(fileToLoad);
+      }
+  });
+});
+
+myApp.onPageInit('presenceList', function (page) {
+  var nrc = localStorage.getItem('teacherNrc');
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getStudents.php", {nrc: nrc}, function(respuesta){
+    data = JSON.parse(respuesta);
+    students="";
+    for (i = 0; i < data.length; i++) { 
+       students="<li><label class='label-checkbox item-content'><input type='checkbox' name='"+data[i][0]+"' value='"+data[i][0]+"'><div class='item-media'><i class='icon icon-form-checkbox'></i></div><div class='item-inner'><div class='item-title'>"+data[i][1]+"</div></div></label></li>";
+     }
+    document.getElementById("presenceList").innerHTML = students;
+  });
+});      

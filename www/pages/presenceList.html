@@ -1,0 +1,44 @@
+<!-- Dynamic navbar for iOS theme -->
+{{#if @global.ios}}
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left sliding">
+            <a href="#" class="back">
+                <i class="icon icon-back"></i>
+                <span>Volver</span>
+            </a>
+        </div>
+        <div class="center sliding">Asistencia</div>
+    </div>
+</div>
+{{/if}}
+ 
+<div class="page" data-page="presenceList">
+    <!-- Fixed navbar for Material theme -->
+    {{else}}
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left">
+                <a href="#" class="back icon-only">
+                    <i class="icon icon-back"></i>
+                </a>
+            </div>
+        <div class="center">Asistencia</div>
+    </div>
+</div>
+    {{/else}}
+    
+    <div class="page-content">
+        <input type="date" name="fecha">
+        <div class="list-block">
+          <ul id="presenceList">
+            <!-- Lista de Alumnos -->
+          </ul>
+        </div>
+        <div class = "list-block">
+          <ul>
+                <li><a href="#" class = "col button button-fill button-round back" onclick="nombrarLista()">Guardar Asistencia</a></li>
+            </ul>
+       </div> 
+    </div>
+</div>    

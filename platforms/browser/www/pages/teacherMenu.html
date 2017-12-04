@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
+    <title>MiAgenda!</title>
+  </head>
+  <body onload="onLoad()">
+
+    <!--Barra de Navegacíon-->
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel panel-right panel-reveal">
+        <div class="content-block">
+            <div class="close-panel"><a id="photo" href="teacher-profile.html"></a></div>
+            <h4 id="user"><!--Nombre de usuario--></h4>
+            <p><a href="teacher-profile.html" class="col button button-fill button-round close-panel">Perfil</a></p>
+            <p><a href="about.html" class="col button button-fill button-round close-panel">Acerca de</a></p>
+            <p><a href="#" class="col button button-fill button-round close-panel cerrar" onclick="cerrarSesion()">Cerrar sesión</a></p>
+        </div>
+    </div>
+
+    <!--Inicio pagina principal-->
+    <div class="views">
+      <div class="view view-main navbar-through">
+        <div class="navbar">
+          <div class="navbar-inner">
+
+            <!--Titulo-->
+            &nbsp&nbsp<img width="40" height="40" src="../img/icon.png">
+            <div class="left">&nbsp&nbspMiAgenda!</div>
+            <div class="right">
+                <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="pages">
+          <div data-page="index" class="page">
+
+            <!--Pull to refresh-->
+            <div class="page-content pull-to-refresh-content">
+              <div class="pull-to-refresh-layer">
+                <div class="preloader"></div>
+                <div class="pull-to-refresh-arrow"></div>
+              </div>
+
+              <table class="responstable" name="subjectsList">
+                <tr>
+                  <th>NRC</th>
+                  <th data-th="Detalles de Materia"><span>Nombre</span></th>
+                  <th>Modulo</th>
+                  <th>Horario</th>
+                </tr>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../lib/framework7/js/framework7.min.js"></script>
+    <script>
+      (function () {
+        if (Framework7.prototype.device.ios) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
+              );
+          }
+      })();
+    </script>
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+
+      //Se cargan la informacion de la base de datos una vez que se termine de cargar la pagina
+      function onLoad() {
+        //Se establece nombre de usuario e imagen
+        var codigo = localStorage.getItem('codigo');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacherData.php", {codigo: codigo}, function(respuesta){
+          if(respuesta=="0"){
+              localStorage.clear();
+              myApp.alert("Serás redireccionado al Login", "Sesión Cerrada", function () {
+                  location.href = "login.html";
+                });
+            }
+            else{
+              valores = respuesta.split("|");
+              document.getElementById("user").innerHTML = valores[1];
+              newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+              document.getElementById("photo").innerHTML = newImage;
+
+              //Obtener listado de materias
+              $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacherSubjects.php", {codigo: codigo}, function(respuesta2){
+                data = JSON.parse(respuesta2);
+                materias = "";
+                for (i = 0; i < data.length; i++) { 
+                  materias+="<tr><td><a href='#'onclick='listarEstudiantes("+data[i][0]+")'>"+data[i][0]+"</td><td>"+data[i][2]+"</td><td>"+data[i][3]+"</td><td>"+data[i][4]+"</td></tr>";
+                }
+                var parent = document.getElementsByName("subjectsList")[0];
+                parent.insertAdjacentHTML('beforeend', materias);
+              });
+            }
+        });
+      }
+
+      var myApp = new Framework7(); 
+      var $$ = Dom7;
+      var ptrContent = $$('.pull-to-refresh-content');
+      ptrContent.on('refresh', function (e) {
+        // Emulate 2s loading
+        setTimeout(function () {
+            myApp.pullToRefreshDone();
+            location.reload();
+        }, 2000);
+      });
+
+      function listarEstudiantes(nrc){
+        localStorage.setItem("teacherNrc", nrc);
+        location.href = "studentsList.html";
+      }
+
+      function cerrarSesion() {
+        var codigo = localStorage.getItem('codigo');
+        myApp.confirm('¿Estás seguro?', 
+          function () {
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/deleteTeacher.php", {codigo: codigo}, function(respuesta){
+              myApp.alert(respuesta, "Cerrar Sesión", function(){
+                localStorage.clear();
+                location.href = "login.html";
+              });
+            });
+          },
+          function () {
+          }
+        );
+      }
+    </script>
+
+    <!--<script type="text/javascript" src="data.json">
+      
+    </script>-->
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <script src="../js/my-app.js"></script>
+  </body>
+</html> 

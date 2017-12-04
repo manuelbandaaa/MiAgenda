@@ -7,9 +7,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" type="text/css" href="../css/styles.css">
     <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
-    <title>Horario</title>
+    <title>MiAgenda!</title>
   </head>
   <body onload="onLoad()">
+
+    <!--Barra de Navegacíon-->
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel panel-right panel-reveal">
+        <div class="content-block">
+            <div class="close-panel"><a id="photo" href="profile.html"></a></div>
+            <h4 id="user"><!--Nombre de usuario--></h4>
+            <p><a href="profile.html" class="col button button-fill button-round close-panel">Perfil</a></p>
+            <p><a href="about.html" class="col button button-fill button-round close-panel">Acerca de</a></p>
+            <p><a href="#" class="col button button-fill button-round close-panel cerrar" onclick="cerrarSesion()">Cerrar sesión</a></p>
+        </div>
+    </div>
+
     <!--Inicio pagina principal-->
     <div class="views">
       <div class="view view-main navbar-through">
@@ -18,7 +32,7 @@
             <a href="#" class="icon-only refresh" onclick="regresarMenu()">
                 <i class="icon icon-back"></i>
             </a>
-            <div class="left">Horario</div>
+            <div class="left">Alumnos</div>
           </div>
         </div>
         <div class="pages">
@@ -27,7 +41,7 @@
             <!-- Speed Dial Wrap -->
             <div class="speed-dial">
               <!-- FAB inside will open Speed Dial actions -->
-              <a href="scheduleForm.html" class="floating-button">
+              <a href="presenceList.html" class="floating-button">
                 <!-- First icon is visible when Speed Dial actions are closed -->
                 <i class="icon icon-plus"></i>
                 <i class="icon icon-plus"></i>
@@ -40,22 +54,16 @@
                 <div class="preloader"></div>
                 <div class="pull-to-refresh-arrow"></div>
               </div>
-                <div id="schedule-table">
-                  <div class="table">
-                      <div class="row header blue">
-                        <div class="cell">NRC</div>
-                        <div class="cell">Codigo</div>
-                        <div class="cell">Nombre</div>
-                        <div class="cell">Profesor</div>
-                        <div class="cell">Modulo</div>
-                        <div class="cell">Horario</div>
-                      </div>
 
-                      <div id="schedule-list">
-                          <!--Lista de Materias-->
-                      </div>
-                  </div>
+              <div class="block-title"><h3 class="title">Lista de Alumnos</h3><hr></div>
+              <div class="list-block">
+                <ul id="studentsList">
+                  <!--Alumnos-->    
+                </ul>
               </div>
+
+              
+
             </div>
           </div>
         </div>
@@ -64,7 +72,7 @@
 
 
     <script src="../lib/framework7/js/framework7.min.js"></script>
-    <script src="../js/swiper.min.js"></script>
+    <script src="../js/Char.bundle.js"></script>
     <script>
       (function () {
         if (Framework7.prototype.device.ios) {
@@ -86,20 +94,25 @@
 
       //Se cargan la informacion de la base de datos una vez que se termine de cargar la pagina
       function onLoad() {
+        //Se establece nombre de usuario e imagen
         var codigo = localStorage.getItem('codigo');
-        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getStudentSubject.php", {codigo: codigo}, function(respuesta4){
-          data = JSON.parse(respuesta4);
-          //alert(data[0][0]);
-          materias="";
-          for (i = 0; i < data.length; i++) { 
-            materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</a></div><div class='cell' data-title='Horario'>"+data[i][5]+"</div></div>";
-          }
-          document.getElementById("schedule-list").innerHTML = materias;
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacherData.php", {codigo: codigo}, function(respuesta){
+            valores = respuesta.split("|");
+            document.getElementById("user").innerHTML = valores[1];
+            newImage = "<img class='img-circle' src="+valores[2]+"\" alt='Fotografia'>";
+            document.getElementById("photo").innerHTML = newImage;
         });
-      }
 
-      function regresarMenu(){
-        location.href = "menu.html";
+        //Se cargan los alumnos
+        var nrc = localStorage.getItem('teacherNrc');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getStudents.php", {nrc: nrc}, function(respuesta){
+          data = JSON.parse(respuesta);
+          students="";
+          for (i = 0; i < data.length; i++) { 
+             students+="<li onclick='verGrafica(\""+data[i][0]+"\")'><a href='studentChart.html' class='item-link item-content'><div class='item-media'><img width='80' height='80' src='"+data[i][2]+"'></div><div class='item-inner'><div class='item-title'>"+data[i][1]+"</div><div class='item-after'>Ver</div></div></a></li>";
+          }
+          document.getElementById("studentsList").innerHTML = students;
+        });
       }
 
       var myApp = new Framework7(); 
@@ -113,32 +126,43 @@
         }, 2000);
       });
 
-      function registrarMateria(){
-        var nrc = document.getElementsByName("nrc")[0].value;
-        var codigoMateria = document.getElementsByName("codigo")[0].value;
-        var nombreMateria = document.getElementsByName("nombre")[0].value;
-        var nombreMaestro = document.getElementsByName("maestro")[0].value;
-        var modulo = document.getElementsByName("modulo")[0].value;
-        var horario = document.getElementsByName("horario")[0].value;
-        var codigoAlumno = localStorage.getItem('codigo');
-        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertSubject.php", {nrc: nrc, codigoMateria: codigoMateria, nombreMateria: nombreMateria, nombreMaestro: nombreMaestro, modulo: modulo, horario: horario, codigoAlumno: codigoAlumno}, function(respuesta5){
-          myApp.alert(respuesta5, "Agregar Materia", function () {
-              location.href = "schedule2.html";
-          });
-        });
-      }
+        var randomScalingFactor = function() {
+        return Math.round(Math.random() * 100);
+    };
 
-      function verMapa(modulo){
-        moduloSinNumero=modulo.slice(0,modulo.length-2);
-        localStorage.setItem("modulo", moduloSinNumero);
+    function regresarMenu(){
+      location.href = "teacherMenu.html";
+    }
+
+    function verGrafica(codigo){
+      alert(codigo);
+    }
+
+    function nombrarLista(){
+      alert("hola");
+    }
+      
+      function cerrarSesion() {
+        var codigo = localStorage.getItem('codigo');
+        myApp.confirm('¿Estás seguro?', 
+          function () {
+            $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/deleteTeacher.php", {codigo: codigo}, function(respuesta){
+              myApp.alert(respuesta, "Cerrar Sesión", function(){
+                localStorage.clear();
+                location.href = "login.html";
+              });
+            });
+          },
+          function () {
+          }
+        );
       }
     </script>
 
     <!--<script type="text/javascript" src="data.json">
       
     </script>-->
+
     <script src="../js/my-app.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtPNc9u3Niia9RQ8Z60ZG1M520OJY7gOg&libraries=places&callback=initMap"
-        async defer></script>
   </body>
 </html> 

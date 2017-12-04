@@ -11,6 +11,12 @@
     location.href = "pages/login.html";
   }
   else{
-    location.href = "pages/menu.html";
+    var tipo = localStorage.getItem('tipo');
+    if(tipo=="T"){
+      location.href = "pages/teacherMenu.html";
+    }
+    else{
+      location.href = "pages/menu.html";
+    }
   }
 </script>
