@@ -25,13 +25,8 @@
           <div data-page="index" class="page">
 
             <!-- Speed Dial Wrap -->
-            <div class="speed-dial">
-              <!-- FAB inside will open Speed Dial actions -->
-              <a href="scheduleForm.html" class="floating-button">
-                <!-- First icon is visible when Speed Dial actions are closed -->
-                <i class="icon icon-plus"></i>
-                <i class="icon icon-plus"></i>
-              </a>
+            <div id="float">
+              
             </div>
 
             <!--Pull to refresh-->
@@ -44,13 +39,16 @@
                 <tr>
                   <th>Modulo</th>
                   <th data-th="Detalles de Materia"><span>NRC</span></th>
-                  <th>Clave</th>
                   <th>Nombre</th>
                   <th>Profesor</th>
                   <th>Horario</th>
+                  <th>Eliminar</th>
                 </tr>
 
               </table>
+              <div id="ios">
+
+              </div>
             </div>
           </div>
         </div>
@@ -67,12 +65,16 @@
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
               );
+              ios="<a href='scheduleForm.html' class='col button button-fill button-round'>"+Agregar+"</a>";
+              document.getElementById("ios").innerHTML = ios;
           }
           else {
               Dom7('head').append(
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
               );
+              float="<div class='speed-dial'><a href='scheduleForm.html' class='floating-button'><i class='icon icon-plus'></i><i class='icon icon-plus'></i></a></div>";
+              document.getElementById("float").innerHTML = float;
           }
       })();
     </script>
@@ -87,7 +89,7 @@
           //alert(data[0][0]);
           materias="";
           for (i = 0; i < data.length; i++) { 
-            materias+="<tr><td><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</td><td>"+data[i][0]+"</td><td>"+data[i][1]+"</td><td>"+data[i][2]+"</td><td>"+data[i][3]+"</td><td>"+data[i][5]+"</td></tr>";
+            materias+="<tr><td><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</td><td>"+data[i][0]+"</td><td>"+data[i][2]+"</td><td>"+data[i][3]+"</td><td>"+data[i][5]+"</td><td><a href='#' onclick='eliminar(\""+data[i][0]+"\")'>Eliminar</td></tr>";
 
             /*materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</a></div><div class='cell' data-title='Horario'>"+data[i][5]+"</div></div>";*/
           }
@@ -112,14 +114,14 @@
       });
 
       function registrarMateria(){
-        var nrc = document.getElementsByName("nrc")[0].value;
-        var codigoMateria = document.getElementsByName("codigo")[0].value;
-        var nombreMateria = document.getElementsByName("nombre")[0].value;
-        var nombreMaestro = document.getElementsByName("maestro")[0].value;
+        //var nombreMateria = document.getElementsByName("materia")[0].value;
+        //var nombreMaestro = document.getElementsByName("maestro")[0].value;
+        var nombreMateria = $('#all-subjects-list').find(":selected").text();
+        var nombreMaestro = $('#teachers-list').find(":selected").text();
         var modulo = document.getElementsByName("modulo")[0].value;
         var horario = document.getElementsByName("horario")[0].value;
         var codigoAlumno = localStorage.getItem('codigo');
-        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertSubject.php", {nrc: nrc, codigoMateria: codigoMateria, nombreMateria: nombreMateria, nombreMaestro: nombreMaestro, modulo: modulo, horario: horario, codigoAlumno: codigoAlumno}, function(respuesta5){
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertSubject.php", {nombreMateria: nombreMateria, nombreMaestro: nombreMaestro, modulo: modulo, horario: horario, codigoAlumno: codigoAlumno}, function(respuesta5){
           myApp.alert(respuesta5, "Agregar Materia", function () {
               location.href = "schedule2.html";
           });
@@ -129,6 +131,15 @@
       function verMapa(modulo){
         moduloSinNumero=modulo.slice(0,modulo.length-2);
         localStorage.setItem("modulo", moduloSinNumero);
+      }
+
+      function eliminar(nrc2){
+        var codigoAlumno = localStorage.getItem('codigo');
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/deleteSubject.php", {codigo: codigoAlumno, nrc: nrc2}, function(respuesta8){
+          myApp.alert(respuesta8, "Eliminar Materia", function () {
+              location.href = "schedule2.html";
+          });
+        });
       }
     </script>
 
