@@ -38,14 +38,10 @@
         <div class="pages">
           <div data-page="index" class="page">
 
+            
             <!-- Speed Dial Wrap -->
-            <div class="speed-dial">
-              <!-- FAB inside will open Speed Dial actions -->
-              <a href="presenceList.html" class="floating-button">
-                <!-- First icon is visible when Speed Dial actions are closed -->
-                <i class="icon icon-plus"></i>
-                <i class="icon icon-plus"></i>
-              </a>
+            <div id="float">
+
             </div>
 
             <!--Pull to refresh-->
@@ -62,17 +58,18 @@
                 </ul>
               </div>
 
-              
+              <div id="ios">
 
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-
+    
     <script src="../lib/framework7/js/framework7.min.js"></script>
-    <script src="../js/Char.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script>
       (function () {
         if (Framework7.prototype.device.ios) {
@@ -80,12 +77,16 @@
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
               );
+              ios="<a href='presenceList.html' class='col button button-fill button-round'>"+Agregar+"</a>";
+              document.getElementById("ios").innerHTML = ios;
           }
           else {
               Dom7('head').append(
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
                   '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
               );
+              float="<div class='speed-dial'><a href='presenceList.html' class='floating-button'><i class='icon icon-plus'></i><i class='icon icon-plus'></i></a></div>";
+              document.getElementById("float").innerHTML = float;
           }
       })();
     </script>
@@ -126,20 +127,40 @@
         }, 2000);
       });
 
-        var randomScalingFactor = function() {
-        return Math.round(Math.random() * 100);
-    };
-
     function regresarMenu(){
       location.href = "teacherMenu.html";
     }
 
     function verGrafica(codigo){
-      alert(codigo);
+      localStorage.setItem("codigoEstudiante", codigo);
     }
 
     function nombrarLista(){
-      alert("hola");
+      students = document.getElementsByName("students");
+      //students = $('#students:checkbox:checked').length > 0;
+      fecha = document.getElementById("fecha").value;
+      nrc = localStorage.getItem('teacherNrc');
+      asistencia = [];
+      if(fecha==""){
+        myApp.alert("No especificaste la fecha", "Asistencia");
+      }
+      else if(students.length==0){
+        myApp.alert("No tienes estudiantes registrados", "Asistencia");
+      }
+      else{
+        for(var i=0; i<students.length; i++){
+          if(students[i].checked){
+            asistencia.push(students[i].value);
+          }
+        }
+        if(asistencia.length==0){
+          asistencia.push("0");
+        }
+        alumnos = JSON.stringify(asistencia);
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaAsistencia.php", {alumnos: alumnos, fecha: fecha, nrc: nrc}, function(respuesta6){
+          myApp.alert(respuesta6, "Asistencia");
+        });
+      }
     }
       
       function cerrarSesion() {
