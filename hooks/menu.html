@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
+    <title>MiAgenda!</title>
+  </head>
+  <body>
+
+    <!--Barra de Navegacíon-->
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel panel-right panel-reveal">
+        <div class="content-block">
+            <img class="img-circle" src="../img/perfil.png">
+            <h4 id="user">Usuario Desconocido</h4>
+            <p><a href="#" class="col button button-fill button-round close-panel">Perfil</a></p>
+            <p><a href="about.html" class="col button button-fill button-round close-panel">Acerca de</a></p>
+            <p><a href="#" class="col button button-fill button-round close-panel cerrar" onclick="cerrarSesion()">Cerrar sesión</a></p>
+        </div>
+    </div>
+
+    <!--Inicio pagina principal-->
+    <div class="views">
+      <div class="view view-main navbar-through">
+        <div class="navbar">
+          <div class="navbar-inner">
+
+            <!--Titulo-->
+            &nbsp&nbsp<img width="40" height="40" src="../img/icon.png">
+            <div class="left">MiAgenda!</div>
+            <div class="right">
+                <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="pages">
+          <div data-page="index" class="page">
+
+            <!--Pull to refresh-->
+            <div class="page-content pull-to-refresh-content">
+              <div class="pull-to-refresh-layer">
+                <div class="preloader"></div>
+                <div class="pull-to-refresh-arrow"></div>
+              </div>
+
+              <!--Seccion Conoce tu centro Universitario-->
+              <div class="block-title"><h3 class="title">Conoce tu Centro Universitario!</h3><hr></div>
+              <div class="swiper-container">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img class="img-slider" src="../img/cucei1.jpg"></div>
+                    <div class="swiper-slide"><img class="img-slider" src="../img/cucei2.jpg"></div>
+                    <div class="swiper-slide"><img class="img-slider" src="../img/cucei3.jpg"></div>
+                    <div class="swiper-slide"><img class="img-slider" src="../img/cucei4.jpg"></div>
+                  </div>
+                  <div class="swiper-pagination"></div>
+                  <div class="swiper-button-next"></div>
+                  <div class="swiper-button-prev"></div>
+              </div>
+
+              <!--Seccion de Clima-->
+              <div class="block-title"><h3 class="title">Clima</h3><hr></div>
+                <div class="div-center center">
+                  <h2 id="weatherDay"></h2>
+                  <h4 id="weatherCity"></h4>
+                  <p id=weatherImg></p>
+                  <h3 id="temperature"></h3>
+                </div>
+              <!--Seccion de Noticias-->
+              <div class="block-title"><h3 class="title">Noticias</h3><hr></div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <a href="about.html" class="item-link item-content">
+                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/3"></div>
+                      <div class="item-inner">
+                        <div class="item-title">Suspensión de Clases</div>
+                        <div class="item-after">Ver</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="item-link item-content">
+                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/2"></div>
+                      <div class="item-inner">
+                        <div class="item-title">Se aproxima la FIL</div>
+                        <div class="item-after">Ver</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="item-link item-content">
+                      <div class="item-media"><img src="http://lorempixel.com/88/88/abstract/1"></div>
+                      <div class="item-inner">
+                        <div class="item-title">Feria del empleo la siguiente semana</div>
+                        <div class="item-after">Ver</div>
+                      </div>
+                    </a>
+                  </li>
+                  </ul>
+                </div>
+
+              <!--Seccion de Horario-->
+              <div class="block-title"><h3 class="title">Horario</h3><hr></div>
+              <a href="schedule.html" class = "col button button-round">Administrar Horario</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="../lib/framework7/js/framework7.min.js"></script>
+    <script src="../js/swiper.min.js"></script>
+    <script>
+      (function () {
+        if (Framework7.prototype.device.ios) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.ios.colors.min.css">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.min.css">' +
+                  '<link rel="stylesheet" href="../lib/framework7/css/framework7.material.colors.min.css">'
+              );
+          }
+      })();
+    </script>
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+      var myApp = new Framework7(); 
+      var $$ = Dom7;
+      var ptrContent = $$('.pull-to-refresh-content');
+      ptrContent.on('refresh', function (e) {
+        // Emulate 2s loading
+        setTimeout(function () {
+            myApp.pullToRefreshDone();
+            location.reload();
+        }, 2000);
+      });
+
+
+      //Se establece nombre de usuario e imagen
+      var codigo = localStorage.getItem('codigo') || '<empty>';
+      $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getUser.php", {codigo: codigo}, function(respuesta){
+          alert("hola");
+      });
+
+      //Calcula clima del dia
+      var callbackFunction = function(data) {
+        var day = data.query.results.channel.lastBuildDate.split(",")[1];
+        var city = data.query.results.channel.location.city+", "+data.query.results.channel.location.region+", "+data.query.results.channel.location.country;
+        var temperature = Math.round((parseInt(data.query.results.channel.item.condition.temp)-32)/1.8);
+        var weatherImg = "<img src='http://l.yimg.com/a/i/us/we/52/"+data.query.results.channel.item.condition.code+".gif'>";
+        document.getElementById("weatherDay").innerHTML = day;
+        document.getElementById("weatherImg").innerHTML = weatherImg;
+        document.getElementById("weatherCity").innerHTML = city;
+        document.getElementById("temperature").innerHTML = temperature+"°C";
+      };
+
+      function cerrarSesion() {
+          localStorage.clear();
+          myApp.alert('Tus datos serán borrados', 'Cerrando Sesión');
+          location.href = "login.html";
+      }
+    </script>
+
+    <script type="text/javascript" src="data.json">
+      
+    </script>
+
+    <!--Liberia para obtener el clima-->
+    <script src="https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='Guadalajara, mx')&format=json&callback=callbackFunction"></script>
+    <script src="../js/my-app.js"></script>
+  </body>
+</html> 
