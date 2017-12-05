@@ -107,6 +107,94 @@ myApp.onPageInit('map', function (page) {
     var modulo = localStorage.getItem('modulo');
     var latitud =0;
     var longitud=0;
+    if(modulo == "A"){
+        latitud = 20.6539887;
+        longitud = -103.32575880000002;
+    }
+    if(modulo == "B"){
+        latitud = 20.653978 ;
+        longitud = -103.324872;
+    }
+    if(modulo == "C"){
+        latitud = 20.654201;
+        longitud = -103.325049;
+    }
+    if(modulo == "D"){
+        latitud = 20.654482;
+        longitud = -103.325311;
+    }
+    if(modulo == "Biblioteca"){
+        latitud = 20.654813;
+        longitud = -103.325529;
+    }
+    if(modulo == "E"){
+        latitud = 20.655559;
+        longitud = -103.32632;
+    }
+    if(modulo == "F"){
+        latitud = 20.65588;
+        longitud = -103.327001;
+    }
+    if(modulo == "G"){
+        latitud = 20.656023;
+        longitud = -103.326459;
+    }
+    if(modulo == "H"){
+        latitud = 20.656068;
+        longitud = -103.325958;
+    }
+    if(modulo == "I"){
+        latitud = 20.656078;
+        longitud = 103.325593;
+    }
+    if(modulo == "J"){
+        latitud = 20.656184;
+        longitud = -103.326036;
+    }
+    if(modulo == "K"){
+        latitud = 20.65637;
+        longitud = 103.326001;
+    }
+    if(modulo == "L"){
+        latitud = 20.656766;
+        longitud = -103.32525;
+    }
+    if(modulo == "M"){
+        latitud = 20.656651;
+        longitud = -103.326162;
+    }
+    if(modulo == "N"){
+        latitud = 20.656944;
+        longitud =  -103.32618;
+    }
+    if(modulo == "O"){
+        latitud = 20.657288;
+        longitud = -103.326256;
+    }
+    if(modulo == "P"){
+        latitud = 20.657323;
+        longitud = -103.325392;
+    }
+    if(modulo == "Q"){
+        latitud = 20.657617;
+        longitud = -103.324877;
+    }
+    if(modulo == "R"){
+        latitud = 20.657639;
+        longitud = -103.325682;
+    }
+    if(modulo == "S"){
+        latitud = 20.657895;
+        longitud = -103.326441;
+    }
+    if(modulo == "V1"){
+        latitud = 20.658297;
+        longitud = -103.326162;
+    }
+    if(modulo == "V2"){
+        latitud = 20.658104;
+        longitud = -103.326248;
+    }
     if(modulo=="X"){
       latitud=20.658233;
       longitud=-103.327155;
@@ -126,6 +214,10 @@ myApp.onPageInit('map', function (page) {
     if(modulo=="Beta" || modulo=="Bet"){
       latitud=20.656242;
       longitud=-103.325239;
+    }
+    if(modulo=="Alfa" || modulo=="Alf"){
+      latitud=20.656447;
+      longitud= -103.325223;
     }
     var map = new google.maps.Map(document.getElementById('map'), {
       mapTypeControl: false,
@@ -162,7 +254,7 @@ var swiper = new Swiper('.swiper-container', {
 //Maestro App
 myApp.onPageInit('teacher-profile', function (page) {
   //Se cargan el nombre y la foto
-  var codigo = localStorage.getItem('codigo') || '<empty>';
+  var codigo = localStorage.getItem('codigo');
   $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getTeacherData.php", {codigo: codigo}, function(respuesta){
       valores = respuesta.split("|");
       document.getElementById("user2").innerHTML = valores[1];
@@ -195,8 +287,29 @@ myApp.onPageInit('presenceList', function (page) {
     data = JSON.parse(respuesta);
     students="";
     for (i = 0; i < data.length; i++) { 
-       students="<li><label class='label-checkbox item-content'><input type='checkbox' name='"+data[i][0]+"' value='"+data[i][0]+"'><div class='item-media'><i class='icon icon-form-checkbox'></i></div><div class='item-inner'><div class='item-title'>"+data[i][1]+"</div></div></label></li>";
+       students="<li><label class='label-checkbox item-content'><input type='checkbox' name='students' value='"+data[i][0]+"'><div class='item-media'><i class='icon icon-form-checkbox'></i></div><div class='item-inner'><div class='item-title'>"+data[i][1]+"</div></div></label></li>";
      }
     document.getElementById("presenceList").innerHTML = students;
   });
-});      
+});
+
+myApp.onPageInit('chart', function (page) {
+  codigoEstudiante = localStorage.getItem('codigoEstudiante');
+  $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/getAsistencia.php", {codigo: codigoEstudiante}, function(respuesta7){
+    datos = JSON.parse(respuesta7);
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Asistencias', 'Faltas'],
+        datasets: [{
+          backgroundColor: [
+            "#f1c40f",
+            "#e74c3c"
+          ],
+          data: [datos[0], datos[1]]
+        }]
+      }
+    });
+  });
+});
