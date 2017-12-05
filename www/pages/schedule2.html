@@ -40,22 +40,17 @@
                 <div class="preloader"></div>
                 <div class="pull-to-refresh-arrow"></div>
               </div>
-                <div id="schedule-table">
-                  <div class="table">
-                      <div class="row header blue">
-                        <div class="cell">NRC</div>
-                        <div class="cell">Codigo</div>
-                        <div class="cell">Nombre</div>
-                        <div class="cell">Profesor</div>
-                        <div class="cell">Modulo</div>
-                        <div class="cell">Horario</div>
-                      </div>
+              <table class="responstable" name="subjectsList">
+                <tr>
+                  <th>Modulo</th>
+                  <th data-th="Detalles de Materia"><span>NRC</span></th>
+                  <th>Clave</th>
+                  <th>Nombre</th>
+                  <th>Profesor</th>
+                  <th>Horario</th>
+                </tr>
 
-                      <div id="schedule-list">
-                          <!--Lista de Materias-->
-                      </div>
-                  </div>
-              </div>
+              </table>
             </div>
           </div>
         </div>
@@ -92,9 +87,12 @@
           //alert(data[0][0]);
           materias="";
           for (i = 0; i < data.length; i++) { 
-            materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</a></div><div class='cell' data-title='Horario'>"+data[i][5]+"</div></div>";
+            materias+="<tr><td><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</td><td>"+data[i][0]+"</td><td>"+data[i][1]+"</td><td>"+data[i][2]+"</td><td>"+data[i][3]+"</td><td>"+data[i][5]+"</td></tr>";
+
+            /*materias +="<div class='row'><div class='cell' data-title='NRC'>"+data[i][0]+"</div><div class='cell' data-title='Codigo'>"+data[i][1]+"</div><div class='cell' data-title='Nombre'>"+data[i][2]+"</div><div class='cell' data-title='Profesor'>"+data[i][3]+"</div><div class='cell' data-title='Modulo'><a href='map.html' onclick='verMapa(\""+data[i][4]+"\")'>"+data[i][4]+"</a></div><div class='cell' data-title='Horario'>"+data[i][5]+"</div></div>";*/
           }
-          document.getElementById("schedule-list").innerHTML = materias;
+          var parent = document.getElementsByName("subjectsList")[0];
+          parent.insertAdjacentHTML('beforeend', materias);
         });
       }
 
