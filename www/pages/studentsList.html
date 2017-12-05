@@ -70,9 +70,9 @@
       </div>
     </div>
 
-
+    
     <script src="../lib/framework7/js/framework7.min.js"></script>
-    <script src="../js/Char.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script>
       (function () {
         if (Framework7.prototype.device.ios) {
@@ -126,20 +126,40 @@
         }, 2000);
       });
 
-        var randomScalingFactor = function() {
-        return Math.round(Math.random() * 100);
-    };
-
     function regresarMenu(){
       location.href = "teacherMenu.html";
     }
 
     function verGrafica(codigo){
-      alert(codigo);
+      localStorage.setItem("codigoEstudiante", codigo);
     }
 
     function nombrarLista(){
-      alert("hola");
+      students = document.getElementsByName("students");
+      //students = $('#students:checkbox:checked').length > 0;
+      fecha = document.getElementById("fecha").value;
+      nrc = localStorage.getItem('teacherNrc');
+      asistencia = [];
+      if(fecha==""){
+        myApp.alert("No especificaste la fecha", "Asistencia");
+      }
+      else if(students.length==0){
+        myApp.alert("No tienes estudiantes registrados", "Asistencia");
+      }
+      else{
+        for(var i=0; i<students.length; i++){
+          if(students[i].checked){
+            asistencia.push(students[i].value);
+          }
+        }
+        if(asistencia.length==0){
+          asistencia.push("0");
+        }
+        alumnos = JSON.stringify(asistencia);
+        $.post("https://seguridad1315.000webhostapp.com/MiAgenda/Data/insertaAsistencia.php", {alumnos: alumnos, fecha: fecha, nrc: nrc}, function(respuesta6){
+          myApp.alert(respuesta6, "Asistencia");
+        });
+      }
     }
       
       function cerrarSesion() {
